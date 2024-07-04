@@ -5,7 +5,8 @@ pipeline {
         stage('Build & Tag Docker Image') {
             steps {
                 script {
-                     sh "docker build -t akki058/adservice:latest ."
+                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
+                        sh "docker build -t akki058/adservice:latest ."
                     }
                 }
             }
@@ -14,8 +15,11 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    sh "docker push akki058/adservice:latest "
+                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
+                        sh "docker push akki058/adservice:latest "
                     }
                 }
             }
         }
+    }
+}
